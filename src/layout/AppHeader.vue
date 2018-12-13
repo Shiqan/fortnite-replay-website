@@ -41,7 +41,7 @@ import CloseButton from "@/components/CloseButton";
 export default {
   components: {
     BaseNav,
-    CloseButton,
+    CloseButton
   }
 };
 </script>

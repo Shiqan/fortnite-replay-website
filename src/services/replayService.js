@@ -8,7 +8,13 @@ export default class ReplayService {
   playerExists(player) {
     return this.provider.playerExists(player);
   }
+
   async getPlayer(player) {
     return await this.provider.getPlayer(player);
+  }
+
+  upload(formData) {
+    let replays = formData.getAll("replays");
+    return this.provider.upload(replays);
   }
 }

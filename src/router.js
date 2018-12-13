@@ -9,6 +9,7 @@ import Landing from "./views/Landing.vue";
 import LandingExampe from "./views/LandingExample.vue";
 import AboutUs from "./views/AboutUs.vue";
 import Login from "./views/Login.vue";
+import Upload from "./views/Upload.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 import Player from "./views/Player.vue";
@@ -33,6 +34,15 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Player,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/upload",
+      name: "upload",
+      components: {
+        header: AppHeader,
+        default: Upload,
         footer: AppFooter
       }
     },

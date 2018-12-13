@@ -24,4 +24,11 @@ export default class ReplayProvider {
       ]
     };
   }
+
+  upload(replays) {
+    let promises = replays.map(x => ({
+      fileName: x.name
+    }));
+    return Promise.all(promises);
+  }
 }
