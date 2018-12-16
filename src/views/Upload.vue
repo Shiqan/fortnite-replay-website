@@ -15,21 +15,26 @@
         <div class="col-lg-5">
           <card gradient="secondary" shadow body-classes="p-lg-5">
             <h4 class="mb-1">Upload your replay(s)</h4>
-            <p class="mt-0">And see how you performed.</p>
+            <p class="mt-0">(max 16 mb at a time)</p>
             <p class="mt-0" v-if="isSaving">Uploading {{ fileCount }} file(s)...</p>
             <p class="mt-0 text-success" v-if="isSuccess">Uploaded {{ fileCount }} file(s)!</p>
             <p class="mt-0 text-danger" v-if="isFailed">{{ uploadError }}</p>
-            <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving || isSuccess" >
+            <form
+              enctype="multipart/form-data"
+              novalidate
+              v-if="isInitial || isSaving || isSuccess"
+              @keydown.enter="submit"
+            >
+              <base-input alternative placeholder="Username" v-model="username"></base-input>
               <base-file-input
-                :name="uploadFieldName"
                 :placeholder="placeholder"
                 alternative
                 multiple
                 addon-left-icon="fa fa-file"
                 :disabled="isSaving"
-                @change="filesChange($event.target.name, $event.target.files);"
-                accept="*/replay"
+                @change="filesChange($event.target.files);"
               ></base-file-input>
+              <base-button type="default" round block size="lg" @click="submit">Upload replays</base-button>
             </form>
           </card>
         </div>
@@ -51,12 +56,12 @@ export default {
   data() {
     return {
       service: undefined,
-      placeholder: "Select file...",
+      placeholder: "Select replay file(s)...",
       fileCount: 0,
-      uploadedFiles: [],
       uploadError: null,
       currentStatus: null,
-      uploadFieldName: "replays"
+      formData: "",
+      username: ""
     };
   },
   computed: {
@@ -81,37 +86,26 @@ export default {
     reset() {
       // reset form to initial state
       this.currentStatus = STATUS_INITIAL;
-      this.uploadedFiles = [];
       this.uploadError = null;
       this.fileCount = 0;
+      this.formData = new FormData(); 
     },
-    filesChange(fieldName, fileList) {
-      this.reset();
+    filesChange(fileList) {
+        if (!fileList.length) return;
+        this.fileCount = fileList.length;
+        // append the files to FormData
+        Array
+          .from(Array(fileList.length).keys())
+          .map(x => {
+            this.formData.append('data_file', fileList[x], fileList[x].name);
+          });
+      },
+    submit() {
 
-      // handle file changes
-      const formData = new FormData();
-
-      if (!fileList.length) return;
-      this.fileCount = fileList.length;
-
-      for(let i = 0, l = this.fileCount; i < l; i++) {
-        if (!fileList[i].name.endsWith(".replay")) {
-          this.uploadError = "Uploaded a file that is not a replay!";
-        }
-      }
-
-      if (this.uploadError !== null) {
-        this.currentStatus = STATUS_FAILED;
-        return;
-      }
-
-      // append the files to FormData
-      Array.from(Array(fileList.length).keys()).map(x => {
-        formData.append(fieldName, fileList[x], fileList[x].name);
-      })
+      this.formData.append("username", this.username);
 
       // save it
-      this.save(formData);
+      this.save(this.formData);
     },
     save(formData) {
       // upload data to the server
@@ -119,12 +113,19 @@ export default {
 
       this.service
         .upload(formData)
-        .then(x => {
-          this.uploadedFiles = [].concat(x);
-          this.currentStatus = STATUS_SUCCESS;
+        .then(response => {
+          if (response.status == "success") {
+            this.fileCount = response.uploaded;
+            this.currentStatus = STATUS_SUCCESS;
+          }
+          else {
+            this.uploadError = response.message;
+            this.currentStatus = STATUS_FAILED;
+          }
         })
-        .catch(err => {
-          this.uploadError = err.response;
+        .catch(e => {
+          console.log(e);
+          this.uploadError = e.response;
           this.currentStatus = STATUS_FAILED;
         });
     }

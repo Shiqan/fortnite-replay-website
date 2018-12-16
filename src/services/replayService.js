@@ -14,7 +14,6 @@ export default class ReplayService {
   }
 
   upload(formData) {
-    let replays = formData.getAll("replays");
-    return this.provider.upload(replays);
+    return this.provider.upload(formData);
   }
 }

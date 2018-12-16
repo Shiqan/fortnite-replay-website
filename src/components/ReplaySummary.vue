@@ -5,7 +5,7 @@
         <icon v-if="icon" :name="this.icon" :gradient="this.gradient" color="white" shadow rounded></icon>
       </div>
       <div class="pl-4">
-        <h5 class="title" :class="this.text">{{ this.replay.name }}</h5>
+        <h5 class="title" :class="this.textClass">{{ this.replay.title }}</h5>
         <p>
           The Arctic Ocean freezes every winter and much of the sea-ice then thaws
           every summer, and that process will continue whatever happens.
@@ -25,15 +25,19 @@ export default {
       description: "Replay"
     }
   },
+  data: function() {
+    return {
+      icon:  "ni ni-satisfied",
+      textClass: "text-danger",
+      gradient: "danger"
+    };
+  },
   mounted() {
-    if (this.replay.id == "1") {
+    console.log(this.replay);
+    if (this.replay.position == 1) {
       this.icon = "ni ni-satisfied";
       this.gradient = "success";
-      this.text = "text-success";
-    } else {
-      this.icon = "ni ni-satisfied";
-      this.gradient = "danger";
-      this.text = "text-danger";
+      this.textClass = "text-success";
     }
   }
 };
