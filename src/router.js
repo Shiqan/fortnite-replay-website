@@ -10,9 +10,10 @@ import LandingExampe from "./views/LandingExample.vue";
 import AboutUs from "./views/AboutUs.vue";
 import Login from "./views/Login.vue";
 import Upload from "./views/Upload.vue";
+import Download from "./views/Download.vue";
 import Register from "./views/Register.vue";
-import Profile from "./views/Profile.vue";
 import Player from "./views/Player.vue";
+import MatchDetails from "./views/MatchDetails.vue";
 
 Vue.use(Router);
 
@@ -38,11 +39,29 @@ export default new Router({
       }
     },
     {
+      path: "/match/:id",
+      name: "match-details",
+      components: {
+        header: AppHeader,
+        default: MatchDetails,
+        footer: AppFooter
+      }
+    },
+    {
       path: "/upload",
       name: "upload",
       components: {
         header: AppHeader,
         default: Upload,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/download",
+      name: "download",
+      components: {
+        header: AppHeader,
+        default: Download,
         footer: AppFooter
       }
     },
@@ -61,15 +80,6 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Register,
-        footer: AppFooter
-      }
-    },
-    {
-      path: "/profile",
-      name: "profile",
-      components: {
-        header: AppHeader,
-        default: Profile,
         footer: AppFooter
       }
     },

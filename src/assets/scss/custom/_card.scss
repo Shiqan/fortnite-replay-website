@@ -83,6 +83,14 @@
             left: 0;
         }
     }
+
+    &.game-won {
+        border-left: 6px solid $success;
+    }
+
+    &.game-lost {
+        border-left: 6px solid $danger;
+    }
 }
 
 // Animated cards

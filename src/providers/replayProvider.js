@@ -7,19 +7,20 @@ class API {
 
   async playerExists(player) {
     return await axios
-      .get(`${this.url}/${player}`)
+      .get(`${this.url}/replay/${player}`)
       .then(response => {
-        return response.exists;
+        return response.data.exists;
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
         return false;
       });
   }
 
-  async getPlayer(username) {
+  async getPlayer(filter) {
+    console.log(filter);
     return await axios
-      .get(`${this.url}/replay/${username}/`)
+      .post(`${this.url}/replay/`, filter)
       .then(response => {
         return response.data;
       })
@@ -54,28 +55,8 @@ export default class ReplayProvider {
     return this.api.playerExists(player);
   }
 
-  async getPlayer(player) {
-    return this.api.getPlayer(player);
-
-    return {
-      name: player,
-      start: 0,
-      length: 2,
-      total: 100,
-      totalWins: 1,
-      replays: [
-        {
-          id: "1",
-          name: "Unsaved-Replay #1",
-          date: "2018-12-01"
-        },
-        {
-          id: "2",
-          name: "Unsaved-Replay #2",
-          date: "2018-12-01"
-        }
-      ]
-    };
+  async getPlayer(filter) {
+    return this.api.getPlayer(filter);
   }
 
   upload(formData) {

@@ -5,12 +5,12 @@ export default class ReplayService {
     this.provider = new ReplayProvider();
   }
 
-  playerExists(player) {
-    return this.provider.playerExists(player);
+  async playerExists(player) {
+    return await this.provider.playerExists(player);
   }
 
-  async getPlayer(player) {
-    return await this.provider.getPlayer(player);
+  async getPlayer(filter) {
+    return await this.provider.getPlayer(filter);
   }
 
   upload(formData) {

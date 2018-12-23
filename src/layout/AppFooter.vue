@@ -12,10 +12,13 @@
                             <p class="lead text-white mt-3">Download the windows service to automatically upload all your replays.</p>
                         </div>
                         <div class="col-lg-3 ml-lg-auto">
-                            <base-button tag="a" href="https://www.creative-tim.com/product/vue-argon-design-system"
+                            <router-link to="/download">
+                                <base-button tag="a"
                                         type="white" block size="lg">
                                 Download tracker
-                            </base-button>
+                                </base-button>
+                            </router-link>
+
                         </div>
                     </div>
                 </div>

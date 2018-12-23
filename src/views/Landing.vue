@@ -20,7 +20,7 @@
               <div class="col-lg-6">
                 <h1 class="display-3 text-white">
                   Your story
-                  <span>starts with us</span> 
+                  <span>starts with us</span>
                 </h1>
                 <form @submit.prevent="submit">
                   <base-input
@@ -126,14 +126,24 @@ export default {
         return;
       }
 
-      if (!this.service.playerExists(this.player)) {
-        this.isValid = false;
-        this.placeholder = "Couldnt find this player in our database!";
-        this.player = undefined;
-        return;
-      }
-      this.isValid = true;
-      this.$router.push("/player/" + this.player);
+      this.service
+        .playerExists(this.player)
+        .then(response => {
+          if (response) {
+            this.isValid = true;
+            this.$router.push("/player/" + this.player);
+          } else {
+            this.isValid = false;
+            this.player = undefined;
+            this.placeholder = "Couldnt find this player in our database!";
+          }
+        })
+        .catch(e => {
+          console.error(e);
+          this.isValid = false;
+          this.player = undefined;
+          this.placeholder = "Error occurred!";
+        });
     }
   }
 };
