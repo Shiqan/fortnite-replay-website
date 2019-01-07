@@ -120,10 +120,9 @@
             <base-button type="primary" @click="submit">Apply filters</base-button>
           </div>
 
-          <div class="col-12 col-lg-8">
+          <div class="col-12 col-lg-8" v-if="loaded">
             <replay-summary
               v-bind:replay="replay"
-              v-if="loaded"
               v-for="replay in replays"
               :key="replay.id"
             ></replay-summary>
@@ -159,7 +158,6 @@ export default {
       },
       showError: false,
       loaded: false,
-      loading: false,
       service: undefined,
       formData: undefined,
       filter: {
@@ -206,7 +204,6 @@ export default {
         return;
       }
       this.resetState();
-      this.loading = true;
 
       this.formData = new FormData();
       this.formData.append("username", this.player);
@@ -229,7 +226,6 @@ export default {
           this.stats.pages = response.pages;
 
           this.loaded = true;
-          this.loading = false;
         })
         .catch(error => {
           console.log(error);

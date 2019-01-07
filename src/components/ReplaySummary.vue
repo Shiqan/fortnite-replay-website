@@ -85,7 +85,9 @@ export default {
     };
   },
   mounted() {
-    if (this.replay.position == 1) {
+    console.log(this.replay.id);
+    console.log(this.replay.winner);
+    if (this.replay.winner) {
       this.icon = "ni ni-satisfied";
       this.gradient = "bg-success";
       this.textClass = "text-success";

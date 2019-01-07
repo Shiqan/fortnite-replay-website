@@ -7,7 +7,7 @@ class API {
 
   async playerExists(player) {
     return await axios
-      .get(`${this.url}/replay/${player}`)
+      .get(`${this.url}/player/${player}`)
       .then(response => {
         return response.data.exists;
       })
@@ -48,8 +48,8 @@ class API {
 export default class ReplayProvider {
   constructor() {
     // this.API = new API(process.env.API_ENDPOINT);
-    // this.api = new API("http://localhost:5000");
-    this.api = new API("https://fortnite-replay-api.herokuapp.com");
+    this.api = new API("http://localhost:5000");
+    // this.api = new API("https://fortnite-replay-api.herokuapp.com");
   }
 
   playerExists(player) {
