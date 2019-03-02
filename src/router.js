@@ -10,6 +10,7 @@ import LandingExampe from "./views/LandingExample.vue";
 import AboutUs from "./views/AboutUs.vue";
 import Login from "./views/Login.vue";
 import Upload from "./views/Upload.vue";
+import Live from "./views/Live.vue";
 import Download from "./views/Download.vue";
 import Register from "./views/Register.vue";
 import Player from "./views/Player.vue";
@@ -44,6 +45,15 @@ export default new Router({
       components: {
         header: AppHeader,
         default: MatchDetails,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/live",
+      name: "live",
+      components: {
+        header: AppHeader,
+        default: Live,
         footer: AppFooter
       }
     },

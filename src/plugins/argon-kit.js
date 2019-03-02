@@ -1,5 +1,6 @@
 import "../assets/vendor/nucleo/css/nucleo.css";
-import "../assets/vendor/font-awesome/css/font-awesome.css";
+// import "../assets/vendor/font-awesome/css/font-awesome.min.css";
+import "../assets/vendor/fork-awesome/css/fork-awesome.min.css";
 import "../assets/scss/argon.scss";
 import globalComponents from "./globalComponents";
 import globalDirectives from "./globalDirectives";

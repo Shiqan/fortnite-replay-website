@@ -18,7 +18,6 @@
                                 Download tracker
                                 </base-button>
                             </router-link>
-
                         </div>
                     </div>
                 </div>
@@ -32,13 +31,13 @@
                 </div>
                 <div class="col-lg-6 text-lg-center btn-wrapper">
                     <a target="_blank" href="https://twitter.com/"
-                       class="btn btn-neutral btn-icon-only btn-twitter btn-round btn-lg" data-toggle="tooltip"
-                       data-original-title="Follow us">
-                        <i class="fa fa-twitter"></i>
+                       class="btn btn-neutral btn-icon-only btn-discord btn-round btn-lg" data-toggle="tooltip"
+                       data-original-title="Chat with us on Discord">
+                        <i class="fa fa-discord-alt"></i>
                     </a>
                     <a target="_blank" href="https://github.com/Shiqan/fortnite-replay-website"
                        class="btn btn-neutral btn-icon-only btn-github btn-round btn-lg" data-toggle="tooltip"
-                       data-original-title="Star on Github">
+                       data-original-title="Code with us on Github">
                         <i class="fa fa-github"></i>
                     </a>
                 </div>
