@@ -14,15 +14,17 @@
                     <div class="row" v-if="standings.length == 0">
                         <div class="col-lg-6">
                             <h1 class="display-3 text-white">
-                                A beautiful Design System
-                                <span>completed with examples</span>
+                                Waiting for your game to start...
+                                <span v-if="isConnected">Connected</span>
+                                <span class="text-danger" v-else>Not Connected</span>
                             </h1>
                         </div>
                     </div>
                     <div class="col-12" v-else>
                         <list-item
                             v-bind:item="item"
-                            v-for="item in orderedStandings"
+                            v-bind:index="index+1"
+                            v-for="(item, index) in orderedStandings"
                             :key="item.eliminator"
                         ></list-item>
                     </div>
@@ -42,7 +44,9 @@ export default {
     data() {
         return {
             socket: null,
-            standings: []
+            isConnected: false,
+            standings: [],
+            knocks: {}
         };
     },
     mounted() {
@@ -70,10 +74,31 @@ export default {
             }
             return -1;
         },
+        onopen() {
+            this.isConnected = true;
+        },
+        onclose() {
+            this.isConnected = false;
+        },
+        onerror() {
+            this.isConnected = false;
+        },
+        knockedBy(eliminated) {
+            return this.knocks[eliminated];
+        },
         changed(data) {
             let eliminator = data.Eliminator;
             let eliminated = data.Eliminated;
             let died = !data.Knocked;
+
+            if (died) {
+                var knockedBy = this.knockedBy(eliminated);
+                if (knockedBy && knockedBy != eliminator) {
+                        eliminator = knockedBy;
+                }
+            } else {
+                this.knocks[eliminated] = eliminator;
+            }
 
             var i = this.doesExists(eliminator);
             if (i >= 0) {
@@ -90,19 +115,20 @@ export default {
 
             i = this.doesExists(eliminated);
             if (i >= 0) {
-                if (died) {
-                    this.standings[i].died = died;
-                }
+                this.standings[i].died = died;
             } else {
                 this.standings.push({
                     eliminator: eliminated,
                     kills: 0,
-                    died: true
+                    died: died
                 });
             }
         },
         start() {
             var onmessage = this.changed;
+            var onopen = this.onopen;
+            var onclose = this.onclose;
+            var onerror = this.onerror;
             var protocol = "ws://";
             if (location.protocol == "https:") {
                 protocol = "wss://";
@@ -111,8 +137,15 @@ export default {
             var url = "ws://localhost:8888/websocket/Shiqan";
             this.socket = new WebSocket(url);
             this.socket.onopen = function() {
+                onopen();
                 console.log("connected");
             };
+            this.socket.onclose = function() {
+                onclose();
+            },
+            this.socket.onerror = function() {
+                onerror();
+            },
             this.socket.onmessage = function(event) {
                 console.log(event);
                 console.log(JSON.parse(event.data));
