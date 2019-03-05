@@ -60,6 +60,9 @@ export default {
         };
     },
     computed: {
+        wsUrl: function () {
+            return process.env.WS_URL || "ws://localhost:8888/websocket/";
+        },
         orderedStandings: function() {
             return this.standings.slice(0).sort((a, b) => {
                 if (a.kills < b.kills) {
@@ -149,12 +152,8 @@ export default {
             var onopen = this.onopen;
             var onclose = this.onclose;
             var onerror = this.onerror;
-            var protocol = "ws://";
-            if (location.protocol == "https:") {
-                protocol = "wss://";
-            }
-            
-            var url = "ws://localhost:8888/websocket/" + this.topic;
+
+            var url = this.wsUrl + this.topic;
             this.socket = new WebSocket(url);
             this.socket.onopen = function() {
                 onopen();

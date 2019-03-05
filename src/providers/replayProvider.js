@@ -47,9 +47,8 @@ class API {
 
 export default class ReplayProvider {
   constructor() {
-    // this.API = new API(process.env.API_ENDPOINT);
-    this.api = new API("http://localhost:5000");
-    // this.api = new API("https://fortnite-replay-api.herokuapp.com");
+    let endpoint = process.env.API_URL || "http://localhost:5000";
+    this.api = new API(endpoint);
   }
 
   playerExists(player) {
