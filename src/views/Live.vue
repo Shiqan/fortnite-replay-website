@@ -14,9 +14,16 @@
                     <div class="row" v-if="standings.length == 0">
                         <div class="col-lg-6">
                             <h1 class="display-3 text-white">
-                                Waiting for your game to start...
-                                <span v-if="isConnected">Connected</span>
-                                <span class="text-danger" v-else>Not Connected</span>
+                                <span v-if="isConnected">Waiting for your game to start...</span>
+                                <form @submit.prevent="submit" v-else>
+                                    <base-input
+                                        v-model="topic"
+                                        :valid="isValid"
+                                        alternative
+                                        :placeholder="placeholder"
+                                        addon-left-icon="ni ni-zoom-split-in"
+                                    ></base-input>
+                                </form>
                             </h1>
                         </div>
                     </div>
@@ -44,13 +51,13 @@ export default {
     data() {
         return {
             socket: null,
+            topic: "",
+            placeholder: "Follow Player...",
+            isValid: undefined,
             isConnected: false,
             standings: [],
             knocks: {}
         };
-    },
-    mounted() {
-        this.start();
     },
     computed: {
         orderedStandings: function() {
@@ -66,6 +73,19 @@ export default {
         }
     },
     methods: {
+        submit() {
+            if (
+                this.topic === null ||
+                this.topic === "" ||
+                this.topic === "undefined"
+            ) {
+                this.isValid = false;
+                this.placeholder = "Not a valid player name";
+                return;
+            }
+
+            this.start();
+        },
         doesExists(player) {
             for (let i = 0; i < this.standings.length; i++) {
                 if (this.standings[i].eliminator === player) {
@@ -133,8 +153,8 @@ export default {
             if (location.protocol == "https:") {
                 protocol = "wss://";
             }
-            // var url = protocol + location.host + "/websocket/Shiqan";
-            var url = "ws://localhost:8888/websocket/Shiqan";
+            
+            var url = "ws://localhost:8888/websocket/" + this.topic;
             this.socket = new WebSocket(url);
             this.socket.onopen = function() {
                 onopen();
