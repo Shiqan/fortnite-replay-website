@@ -61,7 +61,7 @@ export default {
     },
     computed: {
         wsUrl: function () {
-            return process.env.WS_URL || "ws://localhost:8888/websocket/";
+            return process.env.VUE_APP_WS_URL || "ws://localhost:8888/websocket/";
         },
         orderedStandings: function() {
             return this.standings.slice(0).sort((a, b) => {

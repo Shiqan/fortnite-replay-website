@@ -47,7 +47,7 @@ class API {
 
 export default class ReplayProvider {
   constructor() {
-    let endpoint = process.env.API_URL || "http://localhost:5000";
+    let endpoint = process.env.VUE_APP_API_URL || "http://localhost:5000";
     this.api = new API(endpoint);
   }
 
