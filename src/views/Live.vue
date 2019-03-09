@@ -60,18 +60,17 @@ export default {
         };
     },
     computed: {
-        wsUrl: function () {
-            return process.env.VUE_APP_WS_URL || "ws://localhost:8888/websocket/";
+        wsUrl: function() {
+            return (
+                process.env.VUE_APP_WS_URL || "ws://localhost:8888/websocket/"
+            );
         },
         orderedStandings: function() {
             return this.standings.slice(0).sort((a, b) => {
-                if (a.kills < b.kills) {
-                    return 1;
+                if (a.died === b.died) {
+                    return b.kills - a.kills;
                 }
-                if (a.kills > b.kills) {
-                    return -1;
-                }
-                return 0;
+                return a.died ? 1 : -1;
             });
         }
     },
@@ -97,6 +96,10 @@ export default {
             }
             return -1;
         },
+        reset() {
+            this.knocks = {};
+            this.standings = [];
+        },
         onopen() {
             this.isConnected = true;
         },
@@ -110,14 +113,18 @@ export default {
             return this.knocks[eliminated];
         },
         changed(data) {
-            let eliminator = data.Eliminator;
-            let eliminated = data.Eliminated;
-            let died = !data.Knocked;
+            if (data.start) {
+                this.reset();
+                return;
+            }
+            var eliminator = data.Eliminator;
+            var eliminated = data.Eliminated;
+            var died = !data.Knocked;
 
             if (died) {
                 var knockedBy = this.knockedBy(eliminated);
                 if (knockedBy && knockedBy != eliminator) {
-                        eliminator = knockedBy;
+                    eliminator = knockedBy;
                 }
             } else {
                 this.knocks[eliminated] = eliminator;
@@ -125,7 +132,7 @@ export default {
 
             var i = this.doesExists(eliminator);
             if (i >= 0) {
-                if (died) {
+                if (died && eliminator != eliminated) {
                     this.standings[i].kills += 1;
                 }
             } else {
@@ -166,8 +173,6 @@ export default {
                 onerror();
             },
             this.socket.onmessage = function(event) {
-                console.log(event);
-                console.log(JSON.parse(event.data));
                 onmessage(JSON.parse(event.data));
             };
         }

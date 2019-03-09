@@ -30,7 +30,7 @@
                     <h4 class="mb-0 font-weight-light">Let's get in touch on any of these platforms.</h4>
                 </div>
                 <div class="col-lg-6 text-lg-center btn-wrapper">
-                    <a target="_blank" href="https://twitter.com/"
+                    <a target="_blank" href="https://discord.gg/p5CMqJC"
                        class="btn btn-neutral btn-icon-only btn-discord btn-round btn-lg" data-toggle="tooltip"
                        data-original-title="Chat with us on Discord">
                         <i class="fa fa-discord-alt"></i>
